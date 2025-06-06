@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { db } from '@/firebase/firebaseConfig';
@@ -10,6 +9,7 @@ import {
   arrayUnion,
   increment
 } from 'firebase/firestore';
+import Swal from 'sweetalert2'; // <== Tambahkan ini
 
 export default function AddTransactionPage() {
   const { id } = useParams();
@@ -46,7 +46,16 @@ export default function AddTransactionPage() {
       collected: increment(Number(amount)),
     });
 
-    router.push(`/savings/${id}`);
+    // Tampilkan SweetAlert setelah transaksi berhasil
+    Swal.fire({
+      title: "Berhasil!",
+      text: "Transaksi berhasil ditambahkan.",
+      icon: "success",
+      confirmButtonText: "OK"
+    }).then(() => {
+      // Redirect setelah alert ditutup
+      router.push(`/savings/${id}`);
+    });
   };
 
   return (
